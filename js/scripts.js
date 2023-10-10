@@ -432,10 +432,19 @@ function downloadJSON(jsonData, filename) {
 $("#salvarFornecedor").click(function () {
     const formulario = document.querySelector(".form-dados");
 
+    // Verifique a validade do formulário (Campos obrigatórios)
     if (formulario.checkValidity()) {
+        // Exibir o modal de loading
+        $("#loadingModal").modal("show");
+
         const jsonFornecedor = montarJSON();
 
-        downloadJSON(jsonFornecedor);
+        setTimeout(function () {
+            $("#loadingModal").modal("hide");
+
+            downloadJSON(jsonFornecedor);
+        }, 3000);
+
     } else {
         alert("Por favor, preencha todos os campos obrigatórios corretamente.");
     }
