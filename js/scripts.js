@@ -356,7 +356,6 @@ $(document).ready(function () {
             });
         });
 
-        // Trigger do input de arquivo
         $(`#arquivoInput${contadorAnexos}`).trigger("click");
     });
 });
@@ -382,7 +381,7 @@ function montarJSON() {
         anexos: []
     };
 
-    // Preencha os produtos
+    // Preenchendo os produtos
     $(".produto").each(function (index) {
         const $produto = $(this);
         const produtoObj = {
@@ -396,7 +395,6 @@ function montarJSON() {
         jsonFornecedor.produtos.push(produtoObj);
     });
 
-    // Preencha os anexos (se houver)
     $(".anexo").each(function (index) {
         const $anexo = $(this);
         const arquivoInput = $anexo.find(".arquivo-input")[0];
@@ -420,22 +418,13 @@ function montarJSON() {
 // Função para criar um arquivo JSON a partir do objeto e fazer o download
 function downloadJSON(jsonData, filename) {
     const json = JSON.stringify(jsonData, null, 2);
-
-    // Crie um Blob com o JSON
     const blob = new Blob([json], { type: "application/json" });
-
-    // Crie um objeto URL para o Blob
     const url = URL.createObjectURL(blob);
-
-    // Crie um link para fazer o download do Blob
     const a = document.createElement("a");
+
     a.href = url;
     a.download = filename || "dados.json";
-
-    // Simule um clique no link para iniciar o download
     a.click();
-
-    // Revogue o URL do objeto após o download
     URL.revokeObjectURL(url);
 }
 
@@ -443,11 +432,11 @@ function downloadJSON(jsonData, filename) {
 $("#salvarFornecedor").click(function () {
     const formulario = document.querySelector(".form-dados");
 
-    //if (formulario.checkValidity()) {
+    if (formulario.checkValidity()) {
         const jsonFornecedor = montarJSON();
 
         downloadJSON(jsonFornecedor);
-    //} else {
-    //    alert("Por favor, preencha todos os campos obrigatórios corretamente.");
-    //}
+    } else {
+        alert("Por favor, preencha todos os campos obrigatórios corretamente.");
+    }
 });
