@@ -11,9 +11,11 @@
     />
   </head>
   <body>
-    <div class="container mt-5" id="container">
+    <div class="titulo">
       <h1>CADASTRO DE FORNECEDOR/PRODUTO</h1>
+    </div>
 
+    <div class="container" id="container">
       <div class="form-titulo">
         <h2>Dados do Fornecedor</h2>
       </div>
@@ -177,22 +179,22 @@
             />
           </div>
           <div class="col-3">
-            <label for="telefone" class="form-label">Telefone</label>
+            <label for="telefoneContato" class="form-label">Telefone</label>
             <input
               type="text"
               class="form-control"
-              id="telefone"
-              name="telefone"
+              id="telefoneContato"
+              name="telefoneContato"
               required
             />
           </div>
           <div class="col-3">
-            <label for="email" class="form-label">E-mail</label>
+            <label for="emailContato" class="form-label">E-mail</label>
             <input
               type="text"
               class="form-control"
-              id="email"
-              name="email"
+              id="emailContato"
+              name="emailContato"
               required
             />
           </div>
@@ -200,104 +202,73 @@
       </form>
     </div>
 
-    <div class="container mt-5" id="container">
+    <div class="container mt-3" id="container">
       <div class="form-titulo">
         <h2>Produtos</h2>
       </div>
 
       <form class="form-dados">
-        <!-- Form pra cadastro de Produtos -->
-
-        
-
+        <!-- Form para cadastro de Produtos -->
         <div id="listaProdutos">
-          <div class="row" id="produto-conteudo">
-            <div class="col-auto" id="deletar-coluna">
-              <img src="./img/trash.png" class="excluir-produto" />
-            </div>
-  
-            <div class="col" id="produto-container">
-              <div class="row">
-                <p id="produto-contador">Produto - 1</p>
-                <div class="col-auto" id="produto-coluna">
-                  <img src="./img/product.png" />
-                </div>
-                <div class="col">
-                  <label for="produto" class="form-label">Produto</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="produto"
-                    name="produto"
-                    required
-                  />
-                  <div class="row">
-                    <div class="col">
-                      <label for="undMedida" class="form-label"
-                        >UND. Medida</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="undMedida"
-                        name="undMedida"
-                        required
-                      />
-                    </div>
-                    <div class="col">
-                      <label for="qtdEstoque" class="form-label"
-                        >QTD. em Estoque</label
-                      >
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="qtdEstoque"
-                        name="qtdEstoque"
-                        required
-                      />
-                    </div>
-                    <div class="col">
-                      <label for="valorUnitario" class="form-label"
-                        >Valor Unitário</label
-                      >
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="valorUnitario"
-                        name="valorUnitario"
-                        required
-                      />
-                    </div>
-                    <div class="col">
-                      <label for="valorTotal" class="form-label"
-                        >Valor Total</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="valorTotal"
-                        name="valorTotal"
-                        disabled
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- Produtos adicionados dinamicamente aparecerão aqui -->
         </div>
 
-        <button type="button" class="btn btn-success" id="adicionarProduto">Adicionar Produto</button> <!-- Escolha do btn-success para corresponder ao layout que pedia o botão nesse estilo -->
+        <button type="button" class="btn btn-success" id="adicionarProduto">
+          Adicionar Produto
+        </button>
       </form>
-
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <div class="container mt-3" id="container">
+      <div class="form-titulo">
+        <h2>Anexos</h2>
+      </div>
+
+      <form class="form-dados">
+        <!-- Form para cadastro de Anexos -->
+        <div id="listaAnexo">
+          <!-- Anexos adicionados dinamicamente aparecerão aqui -->
+        </div>
+
+        <button type="button" class="btn btn-success" id="incluirAnexo">
+          Incluir Anexo
+        </button>
+      </form>
+    </div>
+
+    <div class="container mt-4 mb-5" id="criarJson">
+      <button type="button" class="btn btn-success" id="salvarFornecedor">
+        Salvar Fornecedor
+      </button>
+    </div>
+
+    <!-- Modal de carregamento -->
+    <div
+      class="modal fade"
+      id="loadingModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="loadingModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <div class="spinner-border" role="status">
+            </div>
+            <p>Enviando dados...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Versão do JQuery solicitada -->
-    <script src="./js/scripts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
     <!-- Arquivo referente aos Scripts JS -->
+    <script src="./js/scripts.js"></script>
+
+    <!-- Bootstrap  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Bootstrap utilizado -->
   </body>
 </html>

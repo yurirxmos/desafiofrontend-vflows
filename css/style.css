@@ -1,14 +1,14 @@
 /* Estilos Gerais */
 
 #container {
-    max-width: 70%;
+    width: 70%;
 }
 
-#container h1 {
+.titulo h1 {
     text-align: center;
     font-weight: 400;
     font-size: 30px;
-    margin-bottom: 1rem;
+    margin: 1rem;
 }
 
 .row {
@@ -19,7 +19,6 @@
     font-weight: 500;
 }
 
-/* Formulário de Dados do Fornecedor  */
 
 .form-dados {
     border: solid 1px black;
@@ -29,6 +28,19 @@
     border-bottom-right-radius: 8px;
     padding: 1rem;
 }
+
+#criarJson {
+    width: 70%;
+}
+
+#criarJson button {
+    width: 100%;
+}
+
+
+
+
+/* Formulário de Dados do Fornecedor  */
 
 .form-titulo {
     background-color: #0085B2;
@@ -55,31 +67,31 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Formulário de Produtos */
 
-#produto-coluna {
+.produto-coluna {
     display: flex;
     align-items: center;
 }
 
-#produto-coluna img {
+.produto-coluna img {
     width: 100px;
 }
 
-#deletar-coluna {
+.deletar-coluna {
     display: flex;
     align-items: center;
 }
 
-#deletar-coluna img {
+.deletar-coluna img {
     width: 30px;
 }
 
-#deletar-coluna :hover{
+.deletar-coluna :hover{
     cursor: pointer;
     filter: brightness(80%);
     transition: 400ms;
 }
 
-#produto-container {
+.produto-container {
     position: relative;
     border: solid 1px black;
     border-radius: 8px;
@@ -89,10 +101,19 @@ input[type="number"]::-webkit-outer-spin-button {
 .form-dados button {
     margin: 1rem 1rem 0 0;
     width: 100%;
+    border: none;
 }
 
-#produto-contador {
-    width: auto;
+.form-dados button img {
+    width: 30px;
+}
+
+.form-dados a img {
+    width: 30px;
+}
+
+.produto-contador {
+    width: fit-content !important;
     left: 10px;
     top: -13px;
     background-color: white;

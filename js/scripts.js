@@ -40,7 +40,7 @@ $(document).ready(function () {
 
         // Verificação de dígitos verificadores
         const digitos = cnpj.split('');
-        const tamanho = digitos.length - 2;
+        let tamanho = digitos.length - 2;
         let numeros = digitos.slice(0, tamanho);
         const digitosVerificadores = digitos.slice(tamanho);
 
@@ -146,49 +146,311 @@ $(document).ready(function () {
     });
 });
 
-
-
 // Função para Produtos
 $(document).ready(function () {
-    function atualizarContador() {
-        $(".produto").each(function (index) {
-            $(this).find("#produto-contador").text("Produto - " + (index + 2));
+    let contadorProdutos = 0;
+
+    function calcularValorTotal($produto) {
+        const $qtdEstoque = $produto.find(".qtdEstoque");
+        const $valorUnitario = $produto.find(".valorUnitario");
+        const $valorTotal = $produto.find(".valorTotal");
+
+        const quantidade = parseInt($qtdEstoque.val()) || 0;
+        const valorUnitario = parseFloat($valorUnitario.val()) || 0;
+
+        const valorTotal = quantidade * valorUnitario;
+
+        $valorTotal.val(valorTotal.toFixed(2));
+    }
+
+    function calcularValorTotalTodosProdutos() {
+        $(".produto").each(function () {
+            calcularValorTotal($(this));
         });
     }
 
-    // Função para adicionar um novo produto
-    function adicionarProduto() {
+    function adicionarNovoProduto() {
+        contadorProdutos++;
 
-        const novoProduto = $("#produto-conteudo").clone();
-        novoProduto.find("input").val("");
-        novoProduto.removeAttr("id");
-        novoProduto.addClass("produto");
+        const novoProduto = `
+        <div class="row produto" id="produto-conteudo-${contadorProdutos}">
+          <div class="col-auto deletar-coluna">
+            <img src="./img/trash.png" class="excluir-produto" />
+          </div>
+  
+          <div class="col produto-container">
+            <div class="row">
+              <p class="produto-contador">Produto - ${contadorProdutos}</p>
+              <div class="col-auto produto-coluna">
+                <img src="./img/product.png" />
+              </div>
+              <div class="col">
+                <label for="produto" class="form-label">Produto</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="produto"
+                  name="produto"
+                  required
+                />
+                <div class="row">
+                  <div class="col">
+                    <label for="undMedida" class="form-label">UND. Medida</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="undMedida"
+                      name="undMedida"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="qtdEstoque" class="form-label">QTD. em Estoque</label>
+                    <input
+                      type="number"
+                      class="form-control qtdEstoque"
+                      name="qtdEstoque"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="valorUnitario" class="form-label">Valor Unitário</label>
+                    <input
+                      type="number"
+                      class="form-control valorUnitario"
+                      name="valorUnitario"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="valorTotal" class="form-label">Valor Total</label>
+                    <input
+                      type="text"
+                      class="form-control valorTotal"
+                      name="valorTotal"
+                      disabled
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
 
         $("#listaProdutos").append(novoProduto);
-        atualizarContador();
+
+        const $novoProduto = $(`#produto-conteudo-${contadorProdutos}`);
+        calcularValorTotal($novoProduto);
     }
 
+    // Adicionar um produto inicial quando o site for carregado
+    adicionarNovoProduto();
+
     $("#adicionarProduto").click(function () {
-        adicionarProduto();
+        adicionarNovoProduto();
     });
 
+    // Evento de exclusão para produtos
     $(document).on("click", ".excluir-produto", function () {
-        if ($(this).closest(".produto").length > 0) {
-            $(this).closest(".produto").remove();
-            // Atualize o contador de produtos após a exclusão
-            atualizarContador();
+        const $produtoExcluido = $(this).closest(".produto");
+
+        // Verifique se há mais de um produto antes de permitir a exclusão
+        if ($(".produto").length > 1) {
+            $produtoExcluido.remove();
+
+            $(".produto").each(function (index) {
+                $(this).find(".produto-contador").text(`Produto - ${index + 1}`);
+                $(this).attr("id", `produto-conteudo-${index + 1}`);
+            });
+
+            contadorProdutos--;
+        } else {
+            // Limpar os campos do primeiro produto apenas se houver mais de um produto
+            $produtoExcluido.find("input").val("");
         }
+
+        calcularValorTotalTodosProdutos();
     });
 
-    // Evento de exclusão para o primeiro produto
-    $("#deletar-coluna").click(function () {
-        if ($(".produto").length > 1) {
-            $(".produto").first().remove();
-            atualizarContador();
-        } else {
-            alert("É necessário ter pelo menos o Produto 1.");
-        }
+    // Evento de cálculo automático ao editar os campos
+    $(document).on("input", ".qtdEstoque, .valorUnitario", function () {
+        const $produto = $(this).closest(".produto");
+        calcularValorTotal($produto);
     });
 });
 
-// Cálculo e preenchimento do Valor Total
+
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function () {
+    let contadorAnexos = 0;
+
+    // Evento para carregar o arquivo e adicioná-lo à lista de anexos
+    $("#incluirAnexo").click(function () {
+        contadorAnexos++;
+
+        const novoAnexo = `
+            <div class="row anexo align-items-end" id="anexo-conteudo-${contadorAnexos}">
+                <div class="col-auto">
+                    <input type="file" class="arquivo-input" id="arquivoInput${contadorAnexos}" style="display: none;" />
+                </div>
+            </div>
+        `;
+
+        $("#listaAnexo").append(novoAnexo);
+
+        // Evento para carregar o nome do arquivo após a seleção
+        $(`#arquivoInput${contadorAnexos}`).change(function () {
+            const $anexo = $(this).closest(".anexo");
+            const nomeArquivo = this.files[0].name;
+
+            // Adicionar botões de excluir e visualizar, juntamente com o nome do arquivo
+            const botoesENome = `
+                <div class="col-auto">
+                    <button type="button" class="btn btn-light excluir-anexo">
+                        <img src="/img/trash.png">
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <a href="#" class="btn btn-light visualizar-anexo">
+                        <img src="/img/eye.png">
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <p class="nome-arquivo">${nomeArquivo}</p>
+                </div>
+            `;
+            $anexo.append(botoesENome);
+
+            // Evento de exclusão para anexos
+            $anexo.find(".excluir-anexo").click(function () {
+                $anexo.remove();
+            });
+
+            // Evento de visualização para anexos (você pode implementar a funcionalidade de download aqui)
+            $anexo.find(".visualizar-anexo").click(function (e) {
+                e.preventDefault();
+                // Implemente a funcionalidade de download do anexo aqui
+                const arquivoInput = $anexo.find(".arquivo-input")[0];
+                if (arquivoInput.files.length > 0) {
+                    const arquivo = arquivoInput.files[0];
+                    const url = URL.createObjectURL(arquivo);
+
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.target = "_blank";
+                    link.download = arquivo.name;
+                    link.click();
+                } else {
+                    console.log("Nenhum arquivo carregado para este anexo.");
+                }
+            });
+        });
+
+        // Trigger do input de arquivo
+        $(`#arquivoInput${contadorAnexos}`).trigger("click");
+    });
+});
+
+
+
+
+
+
+
+// Função para montar o JSON com os dados do fornecedor e produtos
+function montarJSON() {
+    const jsonFornecedor = {
+        razaoSocial: $("#razaoSocial").val(),
+        nomeFantasia: $("#nomeFantasia").val(),
+        cnpj: $("#cnpj").val(),
+        inscricaoEstadual: $("#inscricaoEstadual").val(),
+        inscricaoMunicipal: $("#inscricaoMunicipal").val(),
+        nomeContato: $("#nomeContato").val(),
+        telefoneContato: $("#telefoneContato").val(),
+        emailContato: $("#emailContato").val(),
+        produtos: [],
+        anexos: []
+    };
+
+    // Preencha os produtos
+    $(".produto").each(function (index) {
+        const $produto = $(this);
+        const produtoObj = {
+            indice: index + 1,
+            descricaoProduto: $produto.find("input[name='produto']").val(),
+            unidadeMedida: $produto.find("input[name='undMedida']").val(),
+            qtdeEstoque: $produto.find("input[name='qtdEstoque']").val(),
+            valorUnitario: $produto.find("input[name='valorUnitario']").val(),
+            valorTotal: $produto.find("input[name='valorTotal']").val()
+        };
+        jsonFornecedor.produtos.push(produtoObj);
+    });
+
+    // Preencha os anexos (se houver)
+    $(".anexo").each(function (index) {
+        const $anexo = $(this);
+        const arquivoInput = $anexo.find(".arquivo-input")[0];
+
+        if (arquivoInput.files.length > 0) {
+            const arquivoBlob = arquivoInput.files[0];
+
+            const anexoObj = {
+                indice: index + 1,
+                nomeArquivo: arquivoBlob.name
+            };
+
+            // Adicione o Blob ao objeto anexo
+            anexoObj.blobArquivo = arquivoBlob;
+            jsonFornecedor.anexos.push(anexoObj);
+        }
+    });
+
+    return jsonFornecedor;
+}
+
+// Função para criar um arquivo JSON a partir do objeto e fazer o download
+function downloadJSON(jsonData, filename) {
+    const json = JSON.stringify(jsonData, null, 2);
+
+    // Crie um Blob com o JSON
+    const blob = new Blob([json], { type: "application/json" });
+
+    // Crie um objeto URL para o Blob
+    const url = URL.createObjectURL(blob);
+
+    // Crie um link para fazer o download do Blob
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename || "dados.json";
+
+    // Simule um clique no link para iniciar o download
+    a.click();
+
+    // Revogue o URL do objeto após o download
+    URL.revokeObjectURL(url);
+}
+
+// Evento para salvar o fornecedor
+$("#salvarFornecedor").click(function () {
+    const formulario = document.querySelector(".form-dados");
+
+    if (formulario.checkValidity()) {
+        const jsonFornecedor = montarJSON();
+
+        downloadJSON(jsonFornecedor);
+    } else {
+        // Se o formulário não for válido, você pode tratar isso aqui (por exemplo, exibir uma mensagem de erro)
+        alert("Por favor, preencha todos os campos obrigatórios corretamente.");
+    }
+});
