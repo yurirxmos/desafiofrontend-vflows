@@ -196,14 +196,14 @@ $(document).ready(function () {
                 <div class="row">
                   <div class="col">
                     <label for="undMedida" class="form-label">UND. Medida</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="undMedida"
-                      name="undMedida"
-                      required
-                    />
-                  </div>
+                      <select class="form-select" id="undMedida" name="undMedida" required>
+                        <option value="" disabled selected></option>
+                        <option value="Unidade">Unidade</option>
+                        <option value="Quilograma">Quilograma</option>
+                        <option value="Litro">Litro</option>
+                        <option value="Metro">Metro</option>
+                      </select>
+                    </div>
                   <div class="col">
                     <label for="qtdEstoque" class="form-label">QTD. em Estoque</label>
                     <input
@@ -340,7 +340,6 @@ $(document).ready(function () {
             // Evento de visualização para anexos (você pode implementar a funcionalidade de download aqui)
             $anexo.find(".visualizar-anexo").click(function (e) {
                 e.preventDefault();
-                // Implemente a funcionalidade de download do anexo aqui
                 const arquivoInput = $anexo.find(".arquivo-input")[0];
                 if (arquivoInput.files.length > 0) {
                     const arquivo = arquivoInput.files[0];
@@ -389,7 +388,7 @@ function montarJSON() {
         const produtoObj = {
             indice: index + 1,
             descricaoProduto: $produto.find("input[name='produto']").val(),
-            unidadeMedida: $produto.find("input[name='undMedida']").val(),
+            unidadeMedida: $produto.find("select[name='undMedida']").val(),
             qtdeEstoque: $produto.find("input[name='qtdEstoque']").val(),
             valorUnitario: $produto.find("input[name='valorUnitario']").val(),
             valorTotal: $produto.find("input[name='valorTotal']").val()
@@ -410,7 +409,6 @@ function montarJSON() {
                 nomeArquivo: arquivoBlob.name
             };
 
-            // Adicione o Blob ao objeto anexo
             anexoObj.blobArquivo = arquivoBlob;
             jsonFornecedor.anexos.push(anexoObj);
         }
@@ -445,12 +443,11 @@ function downloadJSON(jsonData, filename) {
 $("#salvarFornecedor").click(function () {
     const formulario = document.querySelector(".form-dados");
 
-    if (formulario.checkValidity()) {
+    //if (formulario.checkValidity()) {
         const jsonFornecedor = montarJSON();
 
         downloadJSON(jsonFornecedor);
-    } else {
-        // Se o formulário não for válido, você pode tratar isso aqui (por exemplo, exibir uma mensagem de erro)
-        alert("Por favor, preencha todos os campos obrigatórios corretamente.");
-    }
+    //} else {
+    //    alert("Por favor, preencha todos os campos obrigatórios corretamente.");
+    //}
 });
